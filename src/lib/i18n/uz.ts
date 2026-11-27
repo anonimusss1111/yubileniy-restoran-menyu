@@ -1,62 +1,121 @@
-export const uz = {
+export interface Dictionary {
   header: {
-    table: "Stol" as string,
-    search: "Qidirish" as string,
-    language: "Til" as string,
+    table: string;
+    search: string;
+    language: string;
+  };
+  categories: {
+    all: string;
+  };
+  product: {
+    outOfStock: string;
+    addToSelection: string;
+    weight: string;
+    calories: string;
+    brand: string;
+  };
+  selection: {
+    title: string;
+    empty: string;
+    clear: string;
+    total: string;
+    showWaiter: string;
+  };
+  search: {
+    placeholder: string;
+    noResults: string;
+  };
+  waiter: {
+    call: string;
+    called: string;
+  };
+  promo: {
+    badge: string;
+  };
+  admin: {
+    login: string;
+    logout: string;
+    menu: string;
+    categories: string;
+    promos: string;
+    qr: string;
+    settings: string;
+    available: string;
+    stop: string;
+    add: string;
+    edit: string;
+    delete: string;
+    save: string;
+    cancel: string;
+    confirmDelete: string;
+    password: string;
+    email: string;
+  };
+  common: {
+    loading: string;
+    error: string;
+    retry: string;
+    empty: string;
+  };
+}
+
+export const uz: Dictionary = {
+  header: {
+    table: "Stol",
+    search: "Qidirish",
+    language: "Til",
   },
   categories: {
-    all: "Barchasi" as string,
+    all: "Barchasi",
   },
   product: {
-    outOfStock: "Vaqtincha tugagan" as string,
-    addToSelection: "Tanlanganlarga qo'shish" as string,
-    weight: "Og'irlik" as string,
-    calories: "Kaloriya" as string,
-    brand: "Brend" as string,
+    outOfStock: "Vaqtincha tugagan",
+    addToSelection: "Tanlanganlarga qo'shish",
+    weight: "Og'irlik",
+    calories: "Kaloriya",
+    brand: "Brend",
   },
   selection: {
-    title: "Tanlanganlar" as string,
-    empty: "Hali hech narsa tanlanmagan" as string,
-    clear: "Tozalash" as string,
-    total: "Jami" as string,
-    showWaiter: "Ofitsiantga ko'rsatish" as string,
+    title: "Tanlanganlar",
+    empty: "Hali hech narsa tanlanmagan",
+    clear: "Tozalash",
+    total: "Jami",
+    showWaiter: "Ofitsiantga ko'rsatish",
   },
   search: {
-    placeholder: "Taom qidirish..." as string,
-    noResults: "Hech narsa topilmadi" as string,
+    placeholder: "Taom qidirish...",
+    noResults: "Hech narsa topilmadi",
   },
   waiter: {
-    call: "Ofitsiantni chaqirish" as string,
-    called: "Ofitsiant chaqirildi" as string,
+    call: "Ofitsiantni chaqirish",
+    called: "Ofitsiant chaqirildi",
   },
   promo: {
-    badge: "Aksiya" as string,
+    badge: "Aksiya",
   },
   admin: {
-    login: "Kirish" as string,
-    logout: "Chiqish" as string,
-    menu: "Menyu" as string,
-    categories: "Kategoriyalar" as string,
-    promos: "Aksiyalar" as string,
-    qr: "QR kodlar" as string,
-    settings: "Sozlamalar" as string,
-    available: "Sotuvda bor" as string,
-    stop: "Stop" as string,
-    add: "Qo'shish" as string,
-    edit: "Tahrirlash" as string,
-    delete: "O'chirish" as string,
-    save: "Saqlash" as string,
-    cancel: "Bekor qilish" as string,
-    confirmDelete: "O'chirishni tasdiqlaysizmi?" as string,
-    password: "Parol" as string,
-    email: "Email" as string,
+    login: "Kirish",
+    logout: "Chiqish",
+    menu: "Menyu",
+    categories: "Kategoriyalar",
+    promos: "Aksiyalar",
+    qr: "QR kodlar",
+    settings: "Sozlamalar",
+    available: "Sotuvda bor",
+    stop: "Stop",
+    add: "Qo'shish",
+    edit: "Tahrirlash",
+    delete: "O'chirish",
+    save: "Saqlash",
+    cancel: "Bekor qilish",
+    confirmDelete: "O'chirishni tasdiqlaysizmi?",
+    password: "Parol",
+    email: "Email",
   },
   common: {
-    loading: "Yuklanmoqda..." as string,
-    error: "Xatolik yuz berdi" as string,
-    retry: "Qayta urinish" as string,
-    empty: "Bo'sh" as string,
+    loading: "Yuklanmoqda...",
+    error: "Xatolik yuz berdi",
+    retry: "Qayta urinish",
+    empty: "Bo'sh",
   },
 };
-
-export type Dictionary = typeof uz;
