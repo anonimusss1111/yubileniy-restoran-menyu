@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { hashPassword } from "@/lib/auth";
 
 export async function GET() {
   try {
@@ -9,6 +10,13 @@ export async function GET() {
     await prisma.$executeRawUnsafe(`CREATE TABLE IF NOT EXISTS "Promotion" ("id" TEXT NOT NULL PRIMARY KEY, "titleUz" TEXT NOT NULL, "titleRu" TEXT NOT NULL, "titleEn" TEXT, "subtitleUz" TEXT, "subtitleRu" TEXT, "subtitleEn" TEXT, "badge" TEXT, "imageUrl" TEXT NOT NULL, "isActive" BOOLEAN NOT NULL DEFAULT true, "sortOrder" INTEGER NOT NULL DEFAULT 0, "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP, "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP)`);
     await prisma.$executeRawUnsafe(`CREATE TABLE IF NOT EXISTS "Setting" ("key" TEXT NOT NULL PRIMARY KEY, "value" TEXT NOT NULL)`);
     await prisma.$executeRawUnsafe(`CREATE TABLE IF NOT EXISTS "WaiterCall" ("id" TEXT NOT NULL PRIMARY KEY, "table" INTEGER NOT NULL, "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP, "isDone" BOOLEAN NOT NULL DEFAULT false)`);
+
+    const hash = await hashPassword("771997111");
+    await prisma.adminUser.upsert({
+      where: { email: "olim" },
+      update: { passwordHash: hash },
+      create: { email: "olim", passwordHash: hash },
+    });
 
     const cat = await prisma.category.upsert({
       where: { id: "seed-cat-1" },
@@ -29,7 +37,7 @@ export async function GET() {
       },
     });
 
-    return NextResponse.json({ ok: true, message: "Tables created and seeded" });
+    return NextResponse.json({ ok: true, message: "Tables created, admin olim created" });
   } catch (e) {
     const msg = e instanceof Error ? e.message : "unknown";
     return NextResponse.json({ ok: false, error: msg }, { status: 500 });
