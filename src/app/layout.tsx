@@ -1,11 +1,17 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans, Playfair_Display } from "next/font/google";
+import { Plus_Jakarta_Sans, Playfair_Display, Manrope } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
 
 const jakarta = Plus_Jakarta_Sans({
-  subsets: ["latin", "latin-ext", "cyrillic"],
+  subsets: ["latin", "latin-ext"],
   variable: "--font-jakarta",
+  display: "swap",
+});
+
+const manrope = Manrope({
+  subsets: ["latin", "latin-ext", "cyrillic", "cyrillic-ext"],
+  variable: "--font-manrope",
   display: "swap",
 });
 
@@ -26,8 +32,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="uz" className={`${jakarta.variable} ${playfair.variable} h-full`}>
-      <body className="min-h-full bg-background text-foreground antialiased">
+    <html lang="uz" className={`${jakarta.variable} ${manrope.variable} ${playfair.variable} h-full`}>
+      <body className="min-h-full bg-background text-foreground antialiased font-sans">
         {children}
         <Toaster position="top-center" richColors />
       </body>
