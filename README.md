@@ -30,4 +30,4 @@ Default admin: admin@yubileniy.uz / admin123
 
 See full spec in the original request for complete implementation details.
 
-<!-- redeploy -->
+<!-- redeploy 2 -->
