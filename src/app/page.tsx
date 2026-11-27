@@ -13,6 +13,16 @@ export default function CustomerPage() {
   const [lang, setLang] = useState<Lang>("uz");
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [tableNum, setTableNum] = useState<number | null>(null);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const t = params.get("table");
+    if (t) {
+      const n = parseInt(t, 10);
+      if (n >= 1 && n <= 999) setTableNum(n);
+    }
+  }, []);
   const dict = getDict(lang);
   const { data, error, isLoading } = useSWR("/api/public/menu", fetcher, { refreshInterval: 30000 });
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -68,6 +78,11 @@ export default function CustomerPage() {
                 <div>
                   <h1 className="font-serif text-xl text-primary leading-none">{restaurantName}</h1>
                   <p className="text-[11px] text-muted mt-0.5">Raqamli menyu</p>
+                  {tableNum && (
+                    <span className="inline-block mt-1 text-[10px] bg-accent text-white px-2 py-0.5 rounded-full">
+                      Stol #{tableNum}
+                    </span>
+                  )}
                 </div>
               </div>
               <div className="flex items-center gap-2">
@@ -127,6 +142,25 @@ export default function CustomerPage() {
           )}
         </div>
       </header>
+
+      {/* Sticky category bar */}
+      {!searchQuery && (
+        <div className="sticky top-16 z-40 bg-background/95 backdrop-blur border-b border-border">
+          <div className="max-w-lg mx-auto px-4 py-2 flex gap-2 overflow-x-auto scrollbar-hide">
+            <button className="px-4 py-2 rounded-full text-sm font-medium bg-primary text-primary-foreground whitespace-nowrap">
+              Barchasi
+            </button>
+            {categories.map((cat: any) => (
+              <button
+                key={cat.id}
+                className="px-4 py-2 rounded-full text-sm font-medium bg-surface border border-border whitespace-nowrap"
+              >
+                {pick(cat, "name", lang)}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="max-w-lg mx-auto">
         {/* Promos */}
