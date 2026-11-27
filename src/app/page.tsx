@@ -31,7 +31,7 @@ export default function CustomerPage() {
       const n = parseInt(t, 10);
       if (n >= 1 && n <= 999) setTableNum(n);
     }
-    const onScroll = () => setScrolled(window.scrollY > 80);
+    const onScroll = () => setScrolled(window.scrollY > 60);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -82,21 +82,18 @@ export default function CustomerPage() {
     <div className="min-h-screen relative text-fg">
       <AppBackground />
 
-      {/* Header */}
+      {/* Header — always present, smooth bg */}
       <header
         className={cn(
-          "sticky top-0 z-50 transition-all",
-          scrolled ? "bg-bg-1/82 backdrop-blur-md border-b border-line" : "bg-transparent"
+          "sticky top-0 z-50 transition-colors duration-300",
+          scrolled ? "bg-bg-1/90 backdrop-blur-md border-b border-line" : "bg-transparent"
         )}
       >
         <div className="max-w-lg mx-auto px-4 h-16 flex items-center justify-between">
-          {scrolled && !searchOpen && (
-            <div className="flex items-center gap-2">
-              <img src="/brand/logo-64.webp" alt="" className="w-9 h-9 rounded-full ring-2 ring-gold-500" />
-              <span className="font-serif text-lg">{restaurantName}</span>
-            </div>
-          )}
-          {!scrolled && <div />}
+          <div className={cn("flex items-center gap-2 transition-opacity duration-300", scrolled && !searchOpen ? "opacity-100" : "opacity-0 pointer-events-none")}>
+            <img src="/brand/logo-64.webp" alt="" className="w-9 h-9 rounded-full ring-2 ring-gold-500" />
+            <span className="font-serif text-lg">{restaurantName}</span>
+          </div>
           {!searchOpen ? (
             <div className="flex items-center gap-2">
               <button
@@ -156,23 +153,26 @@ export default function CustomerPage() {
         </div>
       </header>
 
-      {/* Hero */}
-      {!scrolled && (
-        <div className="relative h-56 flex flex-col items-center justify-end pb-6 text-center">
-          <img
-            src="/brand/logo-192.png"
-            alt=""
-            className="w-24 h-24 rounded-full ring-2 ring-gold-500 shadow-[0_0_32px_rgba(212,165,55,.4)] mb-3"
-          />
-          <h1 className="font-serif text-3xl text-fg drop-shadow-lg">{restaurantName}</h1>
-          <p className="text-gold-400 text-sm tracking-wider mt-1">RAQAMLI MENYU</p>
-          {tableNum && (
-            <span className="mt-2 text-xs border border-gold-500 text-gold-400 px-3 py-1 rounded-full">
-              Stol #{tableNum}
-            </span>
-          )}
-        </div>
-      )}
+      {/* Hero — always in flow, fades on scroll */}
+      <div
+        className={cn(
+          "relative flex flex-col items-center justify-end text-center transition-all duration-300",
+          scrolled ? "h-0 opacity-0 overflow-hidden py-0" : "h-48 opacity-100 pb-4"
+        )}
+      >
+        <img
+          src="/brand/logo-192.png"
+          alt=""
+          className="w-24 h-24 rounded-full ring-2 ring-gold-500 shadow-[0_0_32px_rgba(212,165,55,.4)] mb-3"
+        />
+        <h1 className="font-serif text-3xl text-fg drop-shadow-lg">{restaurantName}</h1>
+        <p className="text-gold-400 text-sm tracking-wider mt-1">RAQAMLI MENYU</p>
+        {tableNum && (
+          <span className="mt-2 text-xs border border-gold-500 text-gold-400 px-3 py-1 rounded-full">
+            Stol #{tableNum}
+          </span>
+        )}
+      </div>
 
       {/* Category bar */}
       {!searchQuery && (
