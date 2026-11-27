@@ -115,6 +115,13 @@ export default function AdminMenuPage() {
             >
               {p.isAvailable ? "Sotuvda" : "Stop"}
             </button>
+            <Link
+              href={`/admin/menu/${p.id}`}
+              className="p-2 text-muted hover:text-primary"
+              aria-label="Tahrirlash"
+            >
+              <Pencil size={16} />
+            </Link>
             <button onClick={() => handleDelete(p.id)} className="p-2 text-muted hover:text-danger">
               <Trash2 size={16} />
             </button>
