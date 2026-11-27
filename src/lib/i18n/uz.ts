@@ -1,4 +1,65 @@
-export const uz = {
+export interface Dictionary {
+  header: {
+    table: string;
+    search: string;
+    language: string;
+  };
+  categories: {
+    all: string;
+  };
+  product: {
+    outOfStock: string;
+    addToSelection: string;
+    weight: string;
+    calories: string;
+    brand: string;
+  };
+  selection: {
+    title: string;
+    empty: string;
+    clear: string;
+    total: string;
+    showWaiter: string;
+  };
+  search: {
+    placeholder: string;
+    noResults: string;
+  };
+  waiter: {
+    call: string;
+    called: string;
+  };
+  promo: {
+    badge: string;
+  };
+  admin: {
+    login: string;
+    logout: string;
+    menu: string;
+    categories: string;
+    promos: string;
+    qr: string;
+    settings: string;
+    available: string;
+    stop: string;
+    add: string;
+    edit: string;
+    delete: string;
+    save: string;
+    cancel: string;
+    confirmDelete: string;
+    password: string;
+    email: string;
+  };
+  common: {
+    loading: string;
+    error: string;
+    retry: string;
+    empty: string;
+  };
+}
+
+export const uz: Dictionary = {
   header: {
     table: "Stol",
     search: "Qidirish",
@@ -57,6 +118,4 @@ export const uz = {
     retry: "Qayta urinish",
     empty: "Bo'sh",
   },
-} as const;
-
-export type Dictionary = typeof uz;
+};
