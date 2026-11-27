@@ -1,60 +1,71 @@
 @import "tailwindcss";
 
 :root {
-  --brand-900: #1F0809;
-  --brand-800: #2A0B0C;
-  --brand-700: #4A1214;
-  --brand-600: #7A1A1E;
-  --brand-500: #A0242A;
-  --gold-500: #D4A537;
-  --gold-400: #E3BC5E;
+  --bg-0: #140506;
+  --bg-1: #1F0809;
+  --bg-2: #2A0B0C;
+  --card: linear-gradient(150deg, rgba(58,17,19,.94), rgba(31,9,10,.96));
+  --card-elevated: #2A0B0C;
+  --line: rgba(212,165,55,.28);
+  --line-strong: rgba(227,188,94,.65);
+  --fg: #F7EFDF;
+  --fg-muted: #CDBFA8;
+  --fg-subtle: #A8998A;
+  --fg-on-gold: #1F0809;
   --gold-300: #F0D58E;
+  --gold-400: #E3BC5E;
+  --gold-500: #D4A537;
   --gold-700: #9C7420;
-  --cream: #FBF6EC;
-  --surface: #FFFFFF;
-  --ink: #1F1A17;
-  --muted: #6B625A;
-  --background: var(--cream);
-  --primary: var(--brand-600);
-  --primary-foreground: #FFFFFF;
-  --accent: var(--gold-500);
-  --foreground: var(--ink);
-  --danger: #B3402F;
-  --success: #4F7A4A;
+  --red-500: #B3242A;
+  --red-600: #8E1B1F;
+  --red-700: #6E1418;
+  --success: #7FB77A;
+  --warning: #E0A93B;
+  --danger: #E5675B;
+  --danger-bg: rgba(229,103,91,.14);
 }
 
 @theme inline {
-  --color-brand-900: var(--brand-900);
-  --color-brand-800: var(--brand-800);
-  --color-brand-700: var(--brand-700);
-  --color-brand-600: var(--brand-600);
-  --color-brand-500: var(--brand-500);
-  --color-gold-500: var(--gold-500);
-  --color-gold-400: var(--gold-400);
+  --color-bg-0: var(--bg-0);
+  --color-bg-1: var(--bg-1);
+  --color-bg-2: var(--bg-2);
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-fg-subtle: var(--fg-subtle);
+  --color-fg-on-gold: var(--fg-on-gold);
   --color-gold-300: var(--gold-300);
+  --color-gold-400: var(--gold-400);
+  --color-gold-500: var(--gold-500);
   --color-gold-700: var(--gold-700);
-  --color-cream: var(--cream);
-  --color-surface: var(--surface);
-  --color-ink: var(--ink);
-  --color-muted: var(--muted);
-  --color-background: var(--background);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-accent: var(--accent);
-  --color-foreground: var(--foreground);
-  --color-danger: var(--danger);
+  --color-red-500: var(--red-500);
+  --color-red-600: var(--red-600);
+  --color-red-700: var(--red-700);
   --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
   --font-sans: var(--font-jakarta);
   --font-serif: var(--font-playfair);
 }
 
 body {
-  background: var(--cream);
-  color: var(--ink);
+  background: var(--bg-1);
+  color: var(--fg);
   font-family: var(--font-jakarta), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
+  color-scheme: dark;
 }
 
 h1, h2, h3, h4, .font-serif {
   font-family: var(--font-playfair), serif;
+}
+
+::selection {
+  background: var(--gold-400);
+  color: var(--fg-on-gold);
+}
+
+.card-surface {
+  background: var(--card);
+  border: 1px solid var(--line);
+  box-shadow: 0 1px 0 rgba(255,255,255,.05) inset, 0 14px 34px rgba(0,0,0,.45);
 }
