@@ -40,12 +40,13 @@ export default function AdminLogin() {
       <form onSubmit={handleSubmit} className="bg-surface p-8 rounded-3xl shadow-soft w-full max-w-sm">
         <h1 className="font-serif text-2xl text-center mb-6 text-primary">Admin</h1>
         <input
-          type="email"
-          placeholder={dict.admin.email}
+          type="text"
+          placeholder="Login"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           className="w-full mb-4 p-3 border border-border rounded-full"
           required
+          autoComplete="username"
         />
         <input
           type="password"
