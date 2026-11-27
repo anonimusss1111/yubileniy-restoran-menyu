@@ -43,14 +43,14 @@
   --color-success: var(--success);
   --color-warning: var(--warning);
   --color-danger: var(--danger);
-  --font-sans: var(--font-jakarta);
+  --font-sans: var(--font-jakarta), var(--font-manrope);
   --font-serif: var(--font-playfair);
 }
 
 body {
   background: var(--bg-1);
   color: var(--fg);
-  font-family: var(--font-jakarta), system-ui, sans-serif;
+  font-family: var(--font-jakarta), var(--font-manrope), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   color-scheme: dark;
 }
