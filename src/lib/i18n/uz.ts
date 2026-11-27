@@ -57,6 +57,6 @@ export const uz = {
     retry: "Qayta urinish",
     empty: "Bo'sh",
   },
-} as const;
+}
 
 export type Dictionary = typeof uz;
