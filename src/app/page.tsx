@@ -158,6 +158,25 @@ export default function CustomerPage() {
         </div>
       </header>
 
+      {/* Hero */}
+      <div className="relative h-56 bg-background-alt overflow-hidden">
+        <img
+          src="/images/bg-restaurant-640.webp"
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-black/20" />
+        <div className="absolute bottom-6 left-0 right-0 max-w-lg mx-auto px-4 text-white">
+          <h1 className="font-serif text-3xl">{restaurantName}</h1>
+          <p className="text-sm opacity-90 mt-1">Raqamli menyu</p>
+          {tableNum && (
+            <span className="inline-block mt-2 text-xs bg-white/20 backdrop-blur px-3 py-1 rounded-full">
+              Stol #{tableNum}
+            </span>
+          )}
+        </div>
+      </div>
+
       {/* Sticky category bar */}
       {!searchQuery && (
         <div className="sticky top-16 z-40 bg-background/95 backdrop-blur border-b border-border">

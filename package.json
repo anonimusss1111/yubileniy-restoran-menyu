@@ -11,7 +11,9 @@
     "db:migrate": "prisma migrate dev",
     "db:seed": "tsx prisma/seed.ts",
     "db:reset": "prisma migrate reset --force && tsx prisma/seed.ts",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "dev:lan": "next dev -H 0.0.0.0",
+    "images:optimize": "tsx scripts/optimize-image.ts"
   },
   "dependencies": {
     "next": "16.4.6",
