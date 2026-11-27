@@ -23,15 +23,6 @@ async function main() {
     { nameUz: "Non va pishiriqlar", nameRu: "Хлеб и выпечка", nameEn: "Bread & pastry", sortOrder: 6 },
   ];
 
-  for (const cat of categories) {
-    await prisma.category.upsert({
-      where: { id: cat.nameUz }, // use name as temp id for idempotency, better use unique
-      update: cat,
-      create: { id: cat.nameUz.toLowerCase().replace(/\s/g, "-"), ...cat },
-    });
-  }
-
-  // Fix: better to find or create properly
   const catMap: Record<string, string> = {};
   for (const cat of categories) {
     const existing = await prisma.category.findFirst({ where: { nameUz: cat.nameUz } });
