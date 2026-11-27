@@ -1,24 +1,32 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import useSWR from "swr";
 import { getDict, pick, type Lang } from "@/lib/i18n";
 import { formatPrice } from "@/lib/format";
 import { cn } from "@/lib/utils";
+import { Search, X, ClipboardList, Bell } from "lucide-react";
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
 export default function CustomerPage() {
   const [lang, setLang] = useState<Lang>("uz");
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const dict = getDict(lang);
   const { data, error, isLoading } = useSWR("/api/public/menu", fetcher, { refreshInterval: 30000 });
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (searchOpen) searchInputRef.current?.focus();
+  }, [searchOpen]);
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#FAF8F5] flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <div className="w-12 h-12 border-4 border-[#8B5E34] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-[#6E6A63] text-sm">{dict.common.loading}</p>
+          <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-muted text-sm">{dict.common.loading}</p>
         </div>
       </div>
     );
@@ -26,8 +34,8 @@ export default function CustomerPage() {
 
   if (error || !data?.ok) {
     return (
-      <div className="min-h-screen bg-[#FAF8F5] flex items-center justify-center p-6">
-        <div className="text-center text-[#B3402F]">{dict.common.error}</div>
+      <div className="min-h-screen bg-background flex items-center justify-center p-6">
+        <div className="text-center text-danger">{dict.common.error}</div>
       </div>
     );
   }
@@ -35,54 +43,112 @@ export default function CustomerPage() {
   const { categories, promos, settings } = data.data;
   const restaurantName = settings.restaurantName || "Yubileniy";
 
+  const filteredCategories = searchQuery
+    ? categories
+        .map((cat: any) => ({
+          ...cat,
+          products: cat.products.filter((p: any) =>
+            [p.nameUz, p.nameRu, p.nameEn].some((n) => n?.toLowerCase().includes(searchQuery.toLowerCase()))
+          ),
+        }))
+        .filter((cat: any) => cat.products.length > 0)
+    : categories;
+
   return (
-    <div className="min-h-screen bg-[#FAF8F5]">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-[#EFECE6] shadow-sm">
-        <div className="max-w-lg mx-auto px-5 py-4 flex items-center justify-between">
-          <div>
-            <h1 className="font-serif text-[28px] leading-none text-[#8B5E34]">{restaurantName}</h1>
-            <p className="text-xs text-[#6E6A63] mt-1 tracking-wide">Raqamli menyu</p>
-          </div>
-          <div className="flex gap-1 bg-[#F3EFE9] p-1 rounded-full">
-            {(["uz", "ru", "en"] as Lang[]).map((l) => (
-              <button
-                key={l}
-                onClick={() => setLang(l)}
-                className={cn(
-                  "px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all",
-                  lang === l
-                    ? "bg-[#8B5E34] text-white shadow-sm"
-                    : "text-[#6E6A63] hover:text-[#8B5E34]"
+      <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
+        <div className="max-w-lg mx-auto px-4 h-16 flex items-center justify-between">
+          {!searchOpen ? (
+            <>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-primary-soft flex items-center justify-center">
+                  <span className="font-serif text-primary text-lg">Y</span>
+                </div>
+                <div>
+                  <h1 className="font-serif text-xl text-primary leading-none">{restaurantName}</h1>
+                  <p className="text-[11px] text-muted mt-0.5">Raqamli menyu</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setSearchOpen(true)}
+                  className="w-11 h-11 rounded-full bg-surface border border-border flex items-center justify-center text-muted hover:text-primary transition"
+                  aria-label={dict.header.search}
+                >
+                  <Search size={20} />
+                </button>
+                <div className="flex bg-background-alt p-1 rounded-full">
+                  {(["uz", "ru", "en"] as Lang[]).map((l) => (
+                    <button
+                      key={l}
+                      onClick={() => setLang(l)}
+                      className={cn(
+                        "px-3 py-1.5 rounded-full text-xs font-semibold transition-all",
+                        lang === l ? "bg-primary text-primary-foreground" : "text-muted"
+                      )}
+                    >
+                      {l.toUpperCase()}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </>
+          ) : (
+            <div className="flex-1 flex items-center gap-2">
+              <div className="flex-1 relative">
+                <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
+                <input
+                  ref={searchInputRef}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder={dict.search.placeholder}
+                  className="w-full h-11 pl-10 pr-10 rounded-full bg-surface border border-border text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
+                />
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery("")}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted"
+                  >
+                    <X size={16} />
+                  </button>
                 )}
+              </div>
+              <button
+                onClick={() => {
+                  setSearchOpen(false);
+                  setSearchQuery("");
+                }}
+                className="text-sm text-primary font-medium px-2"
               >
-                {l.toUpperCase()}
+                Bekor
               </button>
-            ))}
-          </div>
+            </div>
+          )}
         </div>
       </header>
 
       <div className="max-w-lg mx-auto">
         {/* Promos */}
-        {promos.length > 0 && (
-          <div className="px-5 py-5">
-            <div className="flex gap-4 overflow-x-auto pb-2 snap-x snap-mandatory scrollbar-hide">
+        {promos.length > 0 && !searchQuery && (
+          <div className="px-4 py-5">
+            <div className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory scrollbar-hide">
               {promos.map((p: any) => (
                 <div
                   key={p.id}
-                  className="min-w-[300px] snap-start bg-white rounded-3xl overflow-hidden shadow-[0_4px_20px_rgba(139,94,52,0.08)] border border-[#EFECE6]"
+                  className="min-w-[85%] snap-center bg-surface rounded-3xl overflow-hidden shadow-md border border-border"
                 >
-                  <div className="relative h-40">
+                  <div className="relative aspect-[16/9]">
                     <img src={p.imageUrl} alt="" className="w-full h-full object-cover" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                     {p.badge && (
-                      <span className="absolute top-3 right-3 bg-[#B3402F] text-white text-xs font-semibold px-3 py-1 rounded-full">
+                      <span className="absolute top-3 left-3 bg-primary text-primary-foreground text-xs font-bold px-3 py-1 rounded-full -rotate-3 shadow-md">
                         {p.badge}
                       </span>
                     )}
-                  </div>
-                  <div className="p-4">
-                    <h3 className="font-serif text-xl text-[#1F1F1F]">{pick(p, "title", lang)}</h3>
+                    <div className="absolute bottom-3 left-4 right-4 text-white">
+                      <h3 className="font-serif text-xl">{pick(p, "title", lang)}</h3>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -91,58 +157,70 @@ export default function CustomerPage() {
         )}
 
         {/* Categories & Products */}
-        <div className="px-5 pb-10 space-y-10">
-          {categories.map((cat: any) => (
+        <div className="px-4 pb-24 space-y-10">
+          {filteredCategories.length === 0 && searchQuery && (
+            <div className="text-center py-16 text-muted">
+              <p className="text-lg">{dict.search.noResults}</p>
+            </div>
+          )}
+          {filteredCategories.map((cat: any) => (
             <section key={cat.id}>
-              <h2 className="font-serif text-2xl text-[#8B5E34] mb-5">{pick(cat, "name", lang)}</h2>
+              <div className="flex items-baseline justify-between mb-5">
+                <h2 className="font-serif text-2xl text-primary">{pick(cat, "name", lang)}</h2>
+                <span className="text-xs text-muted">{cat.products.length} ta</span>
+              </div>
               <div className="space-y-4">
-                {cat.products?.length > 0 ? (
-                  cat.products.map((prod: any) => (
-                    <div
-                      key={prod.id}
-                      className={cn(
-                        "bg-white rounded-2xl overflow-hidden shadow-[0_2px_16px_rgba(139,94,52,0.06)] border border-[#EFECE6] flex transition-opacity",
-                        !prod.isAvailable && "opacity-60"
-                      )}
-                    >
-                      <div className="w-28 h-28 flex-shrink-0 bg-[#F3EFE9]">
-                        <img
-                          src={prod.imageUrl || "/seed/placeholder.svg"}
-                          alt={pick(prod, "name", lang)}
-                          className="w-full h-full object-cover"
-                        />
+                {cat.products.map((prod: any) => (
+                  <div
+                    key={prod.id}
+                    className={cn(
+                      "bg-surface rounded-2xl p-3 shadow-sm border border-border flex gap-3 active:scale-[0.985] transition-transform",
+                      !prod.isAvailable && "opacity-60"
+                    )}
+                  >
+                    <div className="w-[104px] h-[104px] flex-shrink-0 rounded-2xl overflow-hidden bg-background-alt">
+                      <img
+                        src={prod.imageUrl || "/seed/placeholder.svg"}
+                        alt={pick(prod, "name", lang)}
+                        className={cn("w-full h-full object-cover", !prod.isAvailable && "grayscale")}
+                      />
+                    </div>
+                    <div className="flex-1 min-w-0 flex flex-col justify-between py-0.5">
+                      <div>
+                        <h3 className="font-semibold text-[15px] leading-tight line-clamp-2 text-foreground">
+                          {pick(prod, "name", lang)}
+                        </h3>
+                        {pick(prod, "description", lang) && (
+                          <p className="text-[13px] text-muted mt-1 line-clamp-2 leading-relaxed">
+                            {pick(prod, "description", lang)}
+                          </p>
+                        )}
                       </div>
-                      <div className="flex-1 p-4 flex flex-col justify-between min-w-0">
-                        <div>
-                          <h3 className="font-medium text-[15px] leading-tight text-[#1F1F1F]">
-                            {pick(prod, "name", lang)}
-                          </h3>
-                          {pick(prod, "description", lang) && (
-                            <p className="text-xs text-[#6E6A63] mt-1.5 line-clamp-2 leading-relaxed">
-                              {pick(prod, "description", lang)}
-                            </p>
-                          )}
-                        </div>
-                        <div className="flex items-center justify-between mt-3">
-                          <span className="font-semibold text-[#8B5E34] text-[15px]">
-                            {formatPrice(prod.price, lang)}
+                      <div className="flex items-center justify-between mt-2">
+                        <span className={cn("font-bold text-primary tabular-nums", !prod.isAvailable && "text-muted")}>
+                          {formatPrice(prod.price, lang)}
+                        </span>
+                        {!prod.isAvailable && (
+                          <span className="text-[10px] uppercase tracking-wide text-danger bg-danger-soft px-2 py-0.5 rounded-full font-medium">
+                            {dict.product.outOfStock}
                           </span>
-                          {!prod.isAvailable && (
-                            <span className="text-[11px] text-[#B3402F] font-medium bg-[#B3402F]/10 px-2 py-0.5 rounded-full">
-                              {dict.product.outOfStock}
-                            </span>
-                          )}
-                        </div>
+                        )}
                       </div>
                     </div>
-                  ))
-                ) : (
-                  <p className="text-sm text-[#6E6A63] italic">Bu kategoriyada mahsulot yo‘q</p>
-                )}
+                  </div>
+                ))}
               </div>
             </section>
           ))}
         </div>
+      </div>
+
+      {/* Floating Selection placeholder */}
+      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40">
+        <button className="h-14 px-6 bg-primary text-primary-foreground rounded-full shadow-lg flex items-center gap-2 font-medium text-sm">
+          <ClipboardList size={18} />
+          <span>Tanlanganlar</span>
+        </button>
       </div>
     </div>
   );
