@@ -19,6 +19,7 @@ export default function CustomerPage() {
   const [qrOpen, setQrOpen] = useState(false);
   const [qrUrl, setQrUrl] = useState("");
   const [scrolled, setScrolled] = useState(false);
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const dict = getDict(lang);
   const { data, error, isLoading } = useSWR("/api/public/menu", fetcher, { refreshInterval: 30000 });
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -60,16 +61,22 @@ export default function CustomerPage() {
   const { categories, promos, settings } = data.data;
   const restaurantName = settings.restaurantName || "Yubileyka";
 
-  const filteredCategories = searchQuery
-    ? categories
-        .map((cat: any) => ({
-          ...cat,
-          products: cat.products.filter((p: any) =>
-            [p.nameUz, p.nameRu, p.nameEn].some((n) => n?.toLowerCase().includes(searchQuery.toLowerCase()))
-          ),
-        }))
-        .filter((cat: any) => cat.products.length > 0)
-    : categories;
+  let filteredCategories = categories;
+
+  if (activeCategory) {
+    filteredCategories = categories.filter((cat: any) => cat.id === activeCategory);
+  }
+
+  if (searchQuery) {
+    filteredCategories = filteredCategories
+      .map((cat: any) => ({
+        ...cat,
+        products: cat.products.filter((p: any) =>
+          [p.nameUz, p.nameRu, p.nameEn].some((n) => n?.toLowerCase().includes(searchQuery.toLowerCase()))
+        ),
+      }))
+      .filter((cat: any) => cat.products.length > 0);
+  }
 
   return (
     <div className="min-h-screen relative text-fg">
@@ -171,13 +178,27 @@ export default function CustomerPage() {
       {!searchQuery && (
         <div className="sticky top-16 z-40 bg-bg-1/90 backdrop-blur border-b border-line">
           <div className="max-w-lg mx-auto px-4 py-2 flex gap-2 overflow-x-auto">
-            <button className="px-4 py-2 rounded-full text-sm font-medium bg-gradient-to-r from-gold-300 to-gold-500 text-fg-on-gold whitespace-nowrap">
+            <button
+              onClick={() => setActiveCategory(null)}
+              className={cn(
+                "px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap",
+                activeCategory === null
+                  ? "bg-gradient-to-r from-gold-300 to-gold-500 text-fg-on-gold"
+                  : "bg-white/6 border border-line text-fg"
+              )}
+            >
               Barchasi
             </button>
             {categories.map((cat: any) => (
               <button
                 key={cat.id}
-                className="px-4 py-2 rounded-full text-sm font-medium bg-white/6 border border-line text-fg whitespace-nowrap"
+                onClick={() => setActiveCategory(cat.id)}
+                className={cn(
+                  "px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap",
+                  activeCategory === cat.id
+                    ? "bg-gradient-to-r from-gold-300 to-gold-500 text-fg-on-gold"
+                    : "bg-white/6 border border-line text-fg"
+                )}
               >
                 {pick(cat, "name", lang)}
               </button>
@@ -188,7 +209,7 @@ export default function CustomerPage() {
 
       <div className="max-w-lg mx-auto">
         {/* Promos */}
-        {promos.length > 0 && !searchQuery && (
+        {promos.length > 0 && !searchQuery && !activeCategory && (
           <div className="px-4 py-5">
             <div className="flex gap-3 overflow-x-auto pb-2 snap-x">
               {promos.map((p: any) => (
@@ -213,7 +234,7 @@ export default function CustomerPage() {
 
         {/* Products */}
         <div className="px-4 pb-28 space-y-10">
-          {filteredCategories.length === 0 && searchQuery && (
+          {filteredCategories.length === 0 && (
             <div className="text-center py-16 text-fg-muted">Hech narsa topilmadi</div>
           )}
           {filteredCategories.map((cat: any) => (
