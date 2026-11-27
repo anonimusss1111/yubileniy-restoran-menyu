@@ -20,6 +20,7 @@ export default function CustomerPage() {
   const [qrUrl, setQrUrl] = useState("");
   const [scrolled, setScrolled] = useState(false);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const dict = getDict(lang);
   const { data, error, isLoading } = useSWR("/api/public/menu", fetcher, { refreshInterval: 30000 });
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -153,7 +154,7 @@ export default function CustomerPage() {
         </div>
       </header>
 
-      {/* Hero — normal flow, scrolls away naturally */}
+      {/* Hero */}
       <div className="flex flex-col items-center justify-end text-center pt-4 pb-6">
         <img
           src="/brand/logo-192.png"
@@ -240,9 +241,10 @@ export default function CustomerPage() {
               </div>
               <div className="space-y-4">
                 {cat.products.map((prod: any) => (
-                  <div
+                  <button
                     key={prod.id}
-                    className={cn("card-surface rounded-2xl p-3 flex gap-3", !prod.isAvailable && "opacity-60")}
+                    onClick={() => setSelectedProduct(prod)}
+                    className={cn("card-surface rounded-2xl p-3 flex gap-3 w-full text-left", !prod.isAvailable && "opacity-60")}
                   >
                     <div className="w-[104px] h-[104px] flex-shrink-0 rounded-2xl overflow-hidden bg-bg-2">
                       <img
@@ -267,13 +269,58 @@ export default function CustomerPage() {
                         )}
                       </div>
                     </div>
-                  </div>
+                  </button>
                 ))}
               </div>
             </section>
           ))}
         </div>
       </div>
+
+      {/* Product Detail Sheet */}
+      {selectedProduct && (
+        <div className="fixed inset-0 bg-black/70 z-50 flex items-end justify-center" onClick={() => setSelectedProduct(null)}>
+          <div
+            className="bg-bg-1 border-t border-line rounded-t-3xl w-full max-w-lg max-h-[90vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="relative">
+              <img
+                src={selectedProduct.imageUrl || "/brand/logo-512.webp"}
+                alt=""
+                className="w-full aspect-square object-cover"
+              />
+              <button
+                onClick={() => setSelectedProduct(null)}
+                className="absolute top-4 right-4 w-10 h-10 rounded-full bg-bg-0/80 border border-line flex items-center justify-center text-fg"
+              >
+                <X size={20} />
+              </button>
+            </div>
+            <div className="p-5 space-y-4">
+              <div>
+                <h2 className="font-serif text-2xl text-fg">{pick(selectedProduct, "name", lang)}</h2>
+                {pick(selectedProduct, "description", lang) && (
+                  <p className="text-fg-muted mt-2">{pick(selectedProduct, "description", lang)}</p>
+                )}
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-2xl font-bold text-gold-300">{formatPrice(selectedProduct.price, lang)}</span>
+                {!selectedProduct.isAvailable && (
+                  <span className="text-xs uppercase text-danger bg-danger-bg px-3 py-1 rounded-full">Vaqtincha tugagan</span>
+                )}
+              </div>
+              {(selectedProduct.weight || selectedProduct.calories || selectedProduct.brand) && (
+                <div className="flex gap-4 text-sm text-fg-muted border-t border-line pt-4">
+                  {selectedProduct.weight && <span>Vazni: {selectedProduct.weight}</span>}
+                  {selectedProduct.calories && <span>Kaloriya: {selectedProduct.calories}</span>}
+                  {selectedProduct.brand && <span>Brend: {selectedProduct.brand}</span>}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* QR Modal */}
       {qrOpen && (
