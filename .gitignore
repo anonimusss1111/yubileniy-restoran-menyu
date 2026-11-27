@@ -45,3 +45,17 @@ next-env.d.ts
 public/uploads/*
 !public/uploads/.gitkeep
 public/images/source-bg.jpg
+
+# databases
+prisma/*.db
+prisma/*.db-journal
+prisma/dev.db*
+
+# render
+render.env
+render.env.*
+
+# misc
+.netlify
+screenshots/
+.env.sqlite.backup

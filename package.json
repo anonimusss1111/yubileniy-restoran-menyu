@@ -15,7 +15,10 @@
     "dev:lan": "next dev -H 0.0.0.0",
     "images:optimize": "tsx scripts/optimize-image.ts",
     "brand:assets": "tsx scripts/make-brand-assets.ts",
-    "db:seed:prod": "tsx prisma/seed-prod.ts"
+    "db:seed:prod": "tsx prisma/seed-prod.ts",
+    "preflight": "tsx scripts/preflight.ts",
+    "render:env": "tsx scripts/render-env.ts",
+    "render:env:clean": "rm -f render.env"
   },
   "dependencies": {
     "next": "16.4.6",
@@ -65,5 +68,8 @@
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
+  },
+  "engines": {
+    "node": ">=20.9"
   }
 }

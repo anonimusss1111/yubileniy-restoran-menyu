@@ -48,3 +48,29 @@ Netlify Free: 300 credit/oy. Har production deploy ≈ 15 credit. O‘zgarishlar
 ```bash
 pg_dump "$DIRECT_URL" > backup.sql
 ```
+
+## Render (muqobil hosting)
+
+### Qadamlar
+1. https://render.com da hisob oching (GitHub bilan)
+2. **New → Web Service** → GitHub reponi tanlang
+3. Sozlamalar:
+   - Runtime: **Node**
+   - Build Command: `npm install && npm run build`
+   - Start Command: `npm start`
+   - Plan: **Free**
+4. Environment Variables qo‘shing (`.env.example` dagi ro‘yxat). `STORAGE_PROVIDER=cloudinary` qiling.
+5. Deploy qiling.
+
+### Cold start
+Free planda 15 daqiqa faoliyatsizlikdan keyin server uxlaydi. Birinchi so‘rov ~1 daqiqa kutadi. Buni oldini olish uchun:
+
+### Free pinger
+https://cron-job.org yoki https://uptimerobot.com da har 10 daqiqada:
+```
+GET https://SIZNING-URL.onrender.com/api/ping
+```
+**Muhim:** `/api/ping` ishlating (baza ulanmaydi, Neon uxlay oladi). `/api/health` ni faqat qo‘lda tekshirish uchun ishlating.
+
+### Ogohlantirish
+Render’ning bepul Postgres bazasini **ishlatmang** — 30 kundan keyin o‘chadi. Baza uchun **Neon** ni saqlang.
