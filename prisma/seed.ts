@@ -66,16 +66,18 @@ async function main() {
   for (const p of products) {
     const categoryId = catMap[p.category];
     if (!categoryId) continue;
+    const { category, image, ...rest } = p as any;
+    const data = {
+      ...rest,
+      categoryId,
+      imageUrl: image,
+      isAvailable: p.isAvailable ?? true,
+    };
     const existing = await prisma.product.findFirst({ where: { nameUz: p.nameUz } });
     if (existing) {
-      await prisma.product.update({
-        where: { id: existing.id },
-        data: { ...p, categoryId, isAvailable: p.isAvailable ?? true },
-      });
+      await prisma.product.update({ where: { id: existing.id }, data });
     } else {
-      await prisma.product.create({
-        data: { ...p, categoryId, isAvailable: p.isAvailable ?? true },
-      });
+      await prisma.product.create({ data });
     }
   }
 
