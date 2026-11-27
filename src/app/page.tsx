@@ -5,7 +5,8 @@ import useSWR from "swr";
 import { getDict, pick, type Lang } from "@/lib/i18n";
 import { formatPrice } from "@/lib/format";
 import { cn } from "@/lib/utils";
-import { Search, X, ClipboardList, Bell } from "lucide-react";
+import { Search, X, ClipboardList, QrCode } from "lucide-react";
+import QRCode from "qrcode";
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
@@ -14,6 +15,8 @@ export default function CustomerPage() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [tableNum, setTableNum] = useState<number | null>(null);
+  const [qrOpen, setQrOpen] = useState(false);
+  const [qrUrl, setQrUrl] = useState("");
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -92,6 +95,18 @@ export default function CustomerPage() {
                   aria-label={dict.header.search}
                 >
                   <Search size={20} />
+                </button>
+                <button
+                  onClick={async () => {
+                    const url = window.location.href;
+                    const dataUrl = await QRCode.toDataURL(url, { width: 512, margin: 2 });
+                    setQrUrl(dataUrl);
+                    setQrOpen(true);
+                  }}
+                  className="w-11 h-11 rounded-full bg-surface border border-border flex items-center justify-center text-muted hover:text-primary transition"
+                  aria-label="QR"
+                >
+                  <QrCode size={20} />
                 </button>
                 <div className="flex bg-background-alt p-1 rounded-full">
                   {(["uz", "ru", "en"] as Lang[]).map((l) => (
@@ -248,6 +263,29 @@ export default function CustomerPage() {
           ))}
         </div>
       </div>
+
+      {qrOpen && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-end sm:items-center justify-center" onClick={() => setQrOpen(false)}>
+          <div className="bg-surface rounded-t-3xl sm:rounded-3xl p-6 w-full max-w-sm" onClick={(e) => e.stopPropagation()}>
+            <h3 className="font-serif text-xl text-center mb-4">Menyuni ulashish</h3>
+            {qrUrl && <img src={qrUrl} alt="QR" className="mx-auto w-56 h-56" />}
+            <div className="flex gap-2 mt-4">
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(window.location.href);
+                  alert("Havola nusxalandi");
+                }}
+                className="flex-1 py-2 text-sm border border-border rounded-xl"
+              >
+                Nusxalash
+              </button>
+              <button onClick={() => setQrOpen(false)} className="flex-1 py-2 text-sm bg-primary text-primary-foreground rounded-xl">
+                Yopish
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Floating Selection placeholder */}
       <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40">

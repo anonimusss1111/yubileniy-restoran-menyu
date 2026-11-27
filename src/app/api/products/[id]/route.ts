@@ -40,3 +40,14 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
     return NextResponse.json({ ok: false, error: { message: e.message || "Failed" } }, { status: 400 });
   }
 }
+
+export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
+  try {
+    const { id } = await params;
+    const product = await prisma.product.findUnique({ where: { id }, include: { category: true } });
+    if (!product) return NextResponse.json({ ok: false, error: { message: "Not found" } }, { status: 404 });
+    return NextResponse.json({ ok: true, data: product });
+  } catch {
+    return NextResponse.json({ ok: false, error: { message: "Failed" } }, { status: 500 });
+  }
+}
