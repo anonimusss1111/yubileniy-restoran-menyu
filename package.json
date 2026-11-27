@@ -14,7 +14,8 @@
     "postinstall": "prisma generate",
     "dev:lan": "next dev -H 0.0.0.0",
     "images:optimize": "tsx scripts/optimize-image.ts",
-    "brand:assets": "tsx scripts/make-brand-assets.ts"
+    "brand:assets": "tsx scripts/make-brand-assets.ts",
+    "db:seed:prod": "tsx prisma/seed-prod.ts"
   },
   "dependencies": {
     "next": "16.4.6",
