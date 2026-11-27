@@ -6,6 +6,7 @@ import { getDict, pick, type Lang } from "@/lib/i18n";
 import { formatPrice } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import { Search, X, ClipboardList, QrCode } from "lucide-react";
+import AppBackground from "@/components/AppBackground";
 import QRCode from "qrcode";
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
@@ -68,18 +69,17 @@ export default function CustomerPage() {
     : categories;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen relative">
+      <AppBackground />
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
+      <header className="sticky top-0 z-50 bg-brand-900/80 backdrop-blur-md border-b border-gold-500/25 text-cream">
         <div className="max-w-lg mx-auto px-4 h-16 flex items-center justify-between">
           {!searchOpen ? (
             <>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-primary-soft flex items-center justify-center">
-                  <span className="font-serif text-primary text-lg">Y</span>
-                </div>
+                <img src="/brand/logo-64.webp" alt="" className="w-10 h-10 rounded-full object-cover ring-2 ring-gold-500" />
                 <div>
-                  <h1 className="font-serif text-xl text-primary leading-none">{restaurantName}</h1>
+                  <h1 className="font-serif text-xl text-gold-400 leading-none">{restaurantName}</h1>
                   <p className="text-[11px] text-muted mt-0.5">Raqamli menyu</p>
                   {tableNum && (
                     <span className="inline-block mt-1 text-[10px] bg-accent text-white px-2 py-0.5 rounded-full">
@@ -91,7 +91,7 @@ export default function CustomerPage() {
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setSearchOpen(true)}
-                  className="w-11 h-11 rounded-full bg-surface border border-border flex items-center justify-center text-muted hover:text-primary transition"
+                  className="w-11 h-11 rounded-full bg-surface border border-border flex items-center justify-center text-muted hover:text-gold-400 transition"
                   aria-label={dict.header.search}
                 >
                   <Search size={20} />
@@ -103,7 +103,7 @@ export default function CustomerPage() {
                     setQrUrl(dataUrl);
                     setQrOpen(true);
                   }}
-                  className="w-11 h-11 rounded-full bg-surface border border-border flex items-center justify-center text-muted hover:text-primary transition"
+                  className="w-11 h-11 rounded-full bg-surface border border-border flex items-center justify-center text-muted hover:text-gold-400 transition"
                   aria-label="QR"
                 >
                   <QrCode size={20} />
@@ -115,7 +115,7 @@ export default function CustomerPage() {
                       onClick={() => setLang(l)}
                       className={cn(
                         "px-3 py-1.5 rounded-full text-xs font-semibold transition-all",
-                        lang === l ? "bg-primary text-primary-foreground" : "text-muted"
+                        lang === l ? "bg-primary text-gold-400-foreground" : "text-muted"
                       )}
                     >
                       {l.toUpperCase()}
@@ -149,7 +149,7 @@ export default function CustomerPage() {
                   setSearchOpen(false);
                   setSearchQuery("");
                 }}
-                className="text-sm text-primary font-medium px-2"
+                className="text-sm text-gold-400 font-medium px-2"
               >
                 Bekor
               </button>
@@ -181,7 +181,7 @@ export default function CustomerPage() {
       {!searchQuery && (
         <div className="sticky top-16 z-40 bg-background/95 backdrop-blur border-b border-border">
           <div className="max-w-lg mx-auto px-4 py-2 flex gap-2 overflow-x-auto scrollbar-hide">
-            <button className="px-4 py-2 rounded-full text-sm font-medium bg-primary text-primary-foreground whitespace-nowrap">
+            <button className="px-4 py-2 rounded-full text-sm font-medium bg-primary text-gold-400-foreground whitespace-nowrap">
               Barchasi
             </button>
             {categories.map((cat: any) => (
@@ -210,7 +210,7 @@ export default function CustomerPage() {
                     <img src={p.imageUrl} alt="" className="w-full h-full object-cover" />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                     {p.badge && (
-                      <span className="absolute top-3 left-3 bg-primary text-primary-foreground text-xs font-bold px-3 py-1 rounded-full -rotate-3 shadow-md">
+                      <span className="absolute top-3 left-3 bg-primary text-gold-400-foreground text-xs font-bold px-3 py-1 rounded-full -rotate-3 shadow-md">
                         {p.badge}
                       </span>
                     )}
@@ -234,7 +234,7 @@ export default function CustomerPage() {
           {filteredCategories.map((cat: any) => (
             <section key={cat.id}>
               <div className="flex items-baseline justify-between mb-5">
-                <h2 className="font-serif text-2xl text-primary">{pick(cat, "name", lang)}</h2>
+                <h2 className="font-serif text-2xl text-gold-400">{pick(cat, "name", lang)}</h2>
                 <span className="text-xs text-muted">{cat.products.length} ta</span>
               </div>
               <div className="space-y-4">
@@ -265,7 +265,7 @@ export default function CustomerPage() {
                         )}
                       </div>
                       <div className="flex items-center justify-between mt-2">
-                        <span className={cn("font-bold text-primary tabular-nums", !prod.isAvailable && "text-muted")}>
+                        <span className={cn("font-bold text-gold-400 tabular-nums", !prod.isAvailable && "text-muted")}>
                           {formatPrice(prod.price, lang)}
                         </span>
                         {!prod.isAvailable && (
@@ -298,7 +298,7 @@ export default function CustomerPage() {
               >
                 Nusxalash
               </button>
-              <button onClick={() => setQrOpen(false)} className="flex-1 py-2 text-sm bg-primary text-primary-foreground rounded-xl">
+              <button onClick={() => setQrOpen(false)} className="flex-1 py-2 text-sm bg-primary text-gold-400-foreground rounded-xl">
                 Yopish
               </button>
             </div>
@@ -308,7 +308,7 @@ export default function CustomerPage() {
 
       {/* Floating Selection placeholder */}
       <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40">
-        <button className="h-14 px-6 bg-primary text-primary-foreground rounded-full shadow-lg flex items-center gap-2 font-medium text-sm">
+        <button className="h-14 px-6 bg-primary text-gold-400-foreground rounded-full shadow-lg flex items-center gap-2 font-medium text-sm">
           <ClipboardList size={18} />
           <span>Tanlanganlar</span>
         </button>

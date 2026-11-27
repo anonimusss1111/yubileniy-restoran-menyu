@@ -1,65 +1,60 @@
 @import "tailwindcss";
 
 :root {
-  --background: #FAF8F5;
-  --background-alt: #F4F0EA;
+  --brand-900: #1F0809;
+  --brand-800: #2A0B0C;
+  --brand-700: #4A1214;
+  --brand-600: #7A1A1E;
+  --brand-500: #A0242A;
+  --gold-500: #D4A537;
+  --gold-400: #E3BC5E;
+  --gold-300: #F0D58E;
+  --gold-700: #9C7420;
+  --cream: #FBF6EC;
   --surface: #FFFFFF;
-  --border: #EFECE6;
-  --border-strong: #E2DCD2;
-  --primary: #8B5E34;
-  --primary-hover: #7A5230;
-  --primary-soft: #F3E9DE;
+  --ink: #1F1A17;
+  --muted: #6B625A;
+  --background: var(--cream);
+  --primary: var(--brand-600);
   --primary-foreground: #FFFFFF;
-  --accent: #2C3E2E;
-  --foreground: #1F1F1F;
-  --muted: #6E6A63;
-  --subtle: #A39E95;
-  --success: #4F7A4A;
-  --warning: #C58A2B;
+  --accent: var(--gold-500);
+  --foreground: var(--ink);
   --danger: #B3402F;
-  --danger-soft: #FBEAE6;
-  --radius: 20px;
+  --success: #4F7A4A;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-background-alt: var(--background-alt);
+  --color-brand-900: var(--brand-900);
+  --color-brand-800: var(--brand-800);
+  --color-brand-700: var(--brand-700);
+  --color-brand-600: var(--brand-600);
+  --color-brand-500: var(--brand-500);
+  --color-gold-500: var(--gold-500);
+  --color-gold-400: var(--gold-400);
+  --color-gold-300: var(--gold-300);
+  --color-gold-700: var(--gold-700);
+  --color-cream: var(--cream);
   --color-surface: var(--surface);
-  --color-border: var(--border);
-  --color-border-strong: var(--border-strong);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-background: var(--background);
   --color-primary: var(--primary);
-  --color-primary-hover: var(--primary-hover);
-  --color-primary-soft: var(--primary-soft);
   --color-primary-foreground: var(--primary-foreground);
   --color-accent: var(--accent);
   --color-foreground: var(--foreground);
-  --color-muted: var(--muted);
-  --color-subtle: var(--subtle);
-  --color-success: var(--success);
-  --color-warning: var(--warning);
   --color-danger: var(--danger);
-  --color-danger-soft: var(--danger-soft);
-  --radius-card: 20px;
-  --radius-button: 14px;
-  --radius-image: 16px;
-  --shadow-sm: 0 1px 2px rgba(60,40,20,.06);
-  --shadow-md: 0 6px 24px rgba(139,94,52,.08);
-  --shadow-lg: 0 16px 48px rgba(60,40,20,.14);
+  --color-success: var(--success);
   --font-sans: var(--font-jakarta);
   --font-serif: var(--font-playfair);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--cream);
+  color: var(--ink);
   font-family: var(--font-jakarta), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
 h1, h2, h3, h4, .font-serif {
   font-family: var(--font-playfair), serif;
-}
-
-.tabular-nums {
-  font-variant-numeric: tabular-nums;
 }
