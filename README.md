@@ -29,3 +29,5 @@ Default admin: admin@yubileniy.uz / admin123
 - Local uploads in public/uploads, can be replaced with Cloudinary via StorageProvider
 
 See full spec in the original request for complete implementation details.
+
+<!-- redeploy category filter -->
