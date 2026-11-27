@@ -111,27 +111,36 @@ export default function PromosPage() {
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-50">
           <form onSubmit={handleSubmit} className="bg-surface rounded-2xl p-6 w-full max-w-md space-y-3">
             <h2 className="font-serif text-xl">Yangi aksiya</h2>
-            <input
-              placeholder="Sarlavha (UZ)"
-              value={form.titleUz}
-              onChange={(e) => setForm({ ...form, titleUz: e.target.value })}
-              className="w-full border border-border rounded-xl px-3 py-2"
-              required
-            />
-            <input
-              placeholder="Sarlavha (RU)"
-              value={form.titleRu}
-              onChange={(e) => setForm({ ...form, titleRu: e.target.value })}
-              className="w-full border border-border rounded-xl px-3 py-2"
-              required
-            />
-            <input
-              placeholder="Badge (masalan -20%)"
-              value={form.badge}
-              onChange={(e) => setForm({ ...form, badge: e.target.value })}
-              className="w-full border border-border rounded-xl px-3 py-2"
-            />
-            <input type="file" accept="image/*" onChange={handleImage} />
+            <div>
+              <label className="block text-sm font-medium mb-1">Sarlavha (UZ) *</label>
+              <input
+                value={form.titleUz}
+                onChange={(e) => setForm({ ...form, titleUz: e.target.value })}
+                className="w-full border border-border rounded-xl px-3 py-2"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Sarlavha (RU) *</label>
+              <input
+                value={form.titleRu}
+                onChange={(e) => setForm({ ...form, titleRu: e.target.value })}
+                className="w-full border border-border rounded-xl px-3 py-2"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Badge (masalan -20%, 1+1)</label>
+              <input
+                value={form.badge}
+                onChange={(e) => setForm({ ...form, badge: e.target.value })}
+                className="w-full border border-border rounded-xl px-3 py-2"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Banner rasmi *</label>
+              <input type="file" accept="image/*" onChange={handleImage} className="text-sm" />
+            </div>
             {form.imageUrl && <img src={form.imageUrl} alt="" className="w-full h-32 object-cover rounded-xl" />}
             {uploading && <p className="text-sm">Yuklanmoqda...</p>}
             <div className="flex gap-2 justify-end">
