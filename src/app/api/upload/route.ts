@@ -1,6 +1,4 @@
 import { NextResponse } from "next/server";
-import { writeFile, mkdir } from "fs/promises";
-import path from "path";
 import sharp from "sharp";
 
 export async function POST(req: Request) {
@@ -20,16 +18,14 @@ export async function POST(req: Request) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    const filename = `${Date.now()}-${Math.random().toString(36).slice(2)}.webp`;
-    const uploadDir = path.join(process.cwd(), "public", "uploads");
-    await mkdir(uploadDir, { recursive: true });
+    const webp = await sharp(buffer)
+      .resize(800, 800, { fit: "inside", withoutEnlargement: true })
+      .webp({ quality: 70 })
+      .toBuffer();
 
-    await sharp(buffer)
-      .resize(1600, 1600, { fit: "inside", withoutEnlargement: true })
-      .webp({ quality: 80 })
-      .toFile(path.join(uploadDir, filename));
+    const dataUrl = `data:image/webp;base64,${webp.toString("base64")}`;
 
-    return NextResponse.json({ ok: true, url: `/uploads/${filename}` });
+    return NextResponse.json({ ok: true, url: dataUrl });
   } catch (e: any) {
     return NextResponse.json({ ok: false, error: { message: e.message || "Upload xatosi" } }, { status: 500 });
   }
