@@ -31,7 +31,7 @@ export default function CustomerPage() {
       const n = parseInt(t, 10);
       if (n >= 1 && n <= 999) setTableNum(n);
     }
-    const onScroll = () => setScrolled(window.scrollY > 60);
+    const onScroll = () => setScrolled(window.scrollY > 40);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -82,26 +82,26 @@ export default function CustomerPage() {
     <div className="min-h-screen relative text-fg">
       <AppBackground />
 
-      {/* Header — always present, smooth bg */}
+      {/* Header */}
       <header
         className={cn(
-          "sticky top-0 z-50 transition-colors duration-300",
-          scrolled ? "bg-bg-1/90 backdrop-blur-md border-b border-line" : "bg-transparent"
+          "sticky top-0 z-50 transition-colors duration-200",
+          scrolled ? "bg-bg-1/92 backdrop-blur-md border-b border-line" : "bg-transparent"
         )}
       >
-        <div className="max-w-lg mx-auto px-4 h-16 flex items-center justify-between">
-          <div className={cn("flex items-center gap-2 transition-opacity duration-300", scrolled && !searchOpen ? "opacity-100" : "opacity-0 pointer-events-none")}>
-            <img src="/brand/logo-64.webp" alt="" className="w-9 h-9 rounded-full ring-2 ring-gold-500" />
-            <span className="font-serif text-lg">{restaurantName}</span>
+        <div className="max-w-lg mx-auto px-4 h-14 flex items-center justify-between">
+          <div className={cn("flex items-center gap-2 transition-opacity duration-200", scrolled && !searchOpen ? "opacity-100" : "opacity-0")}>
+            <img src="/brand/logo-64.webp" alt="" className="w-8 h-8 rounded-full ring-2 ring-gold-500" />
+            <span className="font-serif text-base">{restaurantName}</span>
           </div>
           {!searchOpen ? (
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setSearchOpen(true)}
-                className="w-11 h-11 rounded-full bg-white/6 border border-line flex items-center justify-center text-gold-400"
+                className="w-10 h-10 rounded-full bg-white/6 border border-line flex items-center justify-center text-gold-400"
                 aria-label="Qidirish"
               >
-                <Search size={20} />
+                <Search size={18} />
               </button>
               <button
                 onClick={async () => {
@@ -110,10 +110,10 @@ export default function CustomerPage() {
                   setQrUrl(dataUrl);
                   setQrOpen(true);
                 }}
-                className="w-11 h-11 rounded-full bg-white/6 border border-line flex items-center justify-center text-gold-400"
+                className="w-10 h-10 rounded-full bg-white/6 border border-line flex items-center justify-center text-gold-400"
                 aria-label="QR"
               >
-                <QrCode size={20} />
+                <QrCode size={18} />
               </button>
               <div className="flex bg-white/6 border border-line p-1 rounded-full">
                 {(["uz", "ru", "en"] as Lang[]).map((l) => (
@@ -121,7 +121,7 @@ export default function CustomerPage() {
                     key={l}
                     onClick={() => setLang(l)}
                     className={cn(
-                      "px-3 py-1.5 rounded-full text-xs font-semibold",
+                      "px-2.5 py-1 rounded-full text-xs font-semibold",
                       lang === l ? "bg-gradient-to-r from-gold-300 to-gold-500 text-fg-on-gold" : "text-fg-muted"
                     )}
                   >
@@ -137,7 +137,7 @@ export default function CustomerPage() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Taom qidirish..."
-                className="flex-1 h-11 px-4 rounded-full bg-bg-2 border border-line text-fg text-sm focus:outline-none focus:ring-2 focus:ring-gold-400"
+                className="flex-1 h-10 px-4 rounded-full bg-bg-2 border border-line text-fg text-sm focus:outline-none focus:ring-2 focus:ring-gold-400"
               />
               <button
                 onClick={() => {
@@ -153,20 +153,15 @@ export default function CustomerPage() {
         </div>
       </header>
 
-      {/* Hero — always in flow, fades on scroll */}
-      <div
-        className={cn(
-          "relative flex flex-col items-center justify-end text-center transition-all duration-300",
-          scrolled ? "h-0 opacity-0 overflow-hidden py-0" : "h-48 opacity-100 pb-4"
-        )}
-      >
+      {/* Hero — normal flow, scrolls away naturally */}
+      <div className="flex flex-col items-center justify-end text-center pt-4 pb-6">
         <img
           src="/brand/logo-192.png"
           alt=""
-          className="w-24 h-24 rounded-full ring-2 ring-gold-500 shadow-[0_0_32px_rgba(212,165,55,.4)] mb-3"
+          className="w-20 h-20 rounded-full ring-2 ring-gold-500 shadow-[0_0_24px_rgba(212,165,55,.35)] mb-2"
         />
-        <h1 className="font-serif text-3xl text-fg drop-shadow-lg">{restaurantName}</h1>
-        <p className="text-gold-400 text-sm tracking-wider mt-1">RAQAMLI MENYU</p>
+        <h1 className="font-serif text-2xl text-fg drop-shadow-lg">{restaurantName}</h1>
+        <p className="text-gold-400 text-xs tracking-wider mt-0.5">RAQAMLI MENYU</p>
         {tableNum && (
           <span className="mt-2 text-xs border border-gold-500 text-gold-400 px-3 py-1 rounded-full">
             Stol #{tableNum}
@@ -176,7 +171,7 @@ export default function CustomerPage() {
 
       {/* Category bar */}
       {!searchQuery && (
-        <div className="sticky top-16 z-40 bg-bg-1/90 backdrop-blur border-b border-line">
+        <div className="sticky top-14 z-40 bg-bg-1/92 backdrop-blur border-b border-line">
           <div className="max-w-lg mx-auto px-4 py-2 flex gap-2 overflow-x-auto">
             <button
               onClick={() => setActiveCategory(null)}
